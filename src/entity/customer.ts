@@ -3,34 +3,27 @@ class Customer {
   private _id: string;
   private _name: string;
   private _address: string;
+  private _active: boolean;
 
   constructor(id: string, name: string, address: string) {
     this._id = id;
     this._name = name;
     this._address = address;
+    this._active = true;
+  }
+  
+  changeName(name: string) {
+    if (name.split(' ').length <= 1) {
+      return new Error('Invalid name, names must contain at least first and last name.')
+    }
+    this._name = name;
   }
 
-  get id(): string {
-    return this._id;
+  activate() {
+    this._active = true;
   }
 
-  get name(): string {
-    return this._name;
-  }
-
-  get address(): string {
-    return this._address;
-  }
-
-  set id(id: string) {
-    this._id = id
-  }
-
-  set name(name: string) {
-    this._name = name
-  }
-
-  set address(address: string) {
-    this._address = address
+  deactivate() {
+    this._active = false;
   }
 }
