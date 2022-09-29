@@ -1,3 +1,17 @@
+/* 
+
+Complexidade de Negócio
+Domain
+  - Entity
+    - customer.ts (business rules)
+
+Complexidade Acidental
+Infra - Mundo Externo
+  - Entity / Model
+    - customer.ts (get, set) ORM or DB
+
+*/
+
 class Customer {
 
   private _id: string;
