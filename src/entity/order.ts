@@ -1,6 +1,7 @@
 import { OrderItem } from "./order_item";
 
 export default class Order {
+  
   private id: string;
   private customerId: string;
   private items: OrderItem[] = [];

@@ -1,4 +1,5 @@
 export class OrderItem {
+  
   private id: string;
   private name: string;
   private price: number;
