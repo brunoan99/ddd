@@ -12,7 +12,9 @@ Infra - Mundo Externo
 
 */
 
-class Customer {
+import { Address } from "./address";
+
+export class Customer {
 
   private _id: string;
   private _name: string;
@@ -24,6 +26,8 @@ class Customer {
     this._name = name;
     this.validate()
   }
+
+  get name(): string { return this._name; }
 
   validate() {
     if (this._name.length === 0) {
@@ -48,7 +52,7 @@ class Customer {
     if (this._id.length === 0) {
       throw new Error('Id is required to activate a customer')
     }
-    if ( this._address !== undefined) {
+    if ( this._address === undefined) {
       throw new Error('Address is required to activate a customer')
     }
     this._active = true;
@@ -56,6 +60,10 @@ class Customer {
 
   deactivate() {
     this._active = false;
+  }
+
+  isActive() {
+    return this._active;
   }
 
   set Address(address: Address) {

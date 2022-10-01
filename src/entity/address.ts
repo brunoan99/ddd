@@ -1,4 +1,4 @@
-class Address {
+export class Address {
   
   private street: string = "";
   private number: number = 0;
