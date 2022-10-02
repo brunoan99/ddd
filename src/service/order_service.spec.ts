@@ -1,3 +1,4 @@
+import { Customer } from "../entity/customer"
 import Order from "../entity/order"
 import { OrderItem } from "../entity/order_item"
 import { OrderService } from "./order_service"
@@ -13,5 +14,13 @@ describe('Product Service', () => {
     ]
     const total = OrderService.total(orders)
     expect(total).toBe(100)
+  })
+
+  test('Should place an order', () => {
+    const customer = new Customer("1", "Customer 1")
+    const item1 = new OrderItem("1", "1", "product1", 10, 1)
+    const order = OrderService.placeOrder(customer, [item1])
+    expect(customer.rewardPoints).toBe(5)
+    expect(order.total()).toBe(10)
   })
 })
