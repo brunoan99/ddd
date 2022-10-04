@@ -27,7 +27,7 @@ describe('Customer', () => {
 
   test("Should activate customer", () => {
     const customer = new Customer("1", "Customer 1")
-    customer.Address = new Address("Rua 1", 1, "cep1", "cidade")
+    customer.changeAddress(new Address("Rua 1", 1, "cep1", "cidade"))
     customer.activate()
     expect(customer.isActive()).toBeTruthy()
   })
