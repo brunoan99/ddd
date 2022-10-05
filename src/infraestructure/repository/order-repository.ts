@@ -1,5 +1,3 @@
-import { Transaction } from "sequelize";
-import sequelize from "sequelize/types/sequelize";
 import { Order } from "../../domain/entity/order";
 import { OrderItem } from "../../domain/entity/order_item";
 import { OrderRepositoryInterface } from "../../domain/repository/order-repository-interface";
@@ -39,6 +37,7 @@ export class OrderRepository implements OrderRepositoryInterface {
           id,
         },
         rejectOnEmpty: true,
+        include: [{ model: OrderItemModel }],
       });
     } catch (error) {
       throw new Error(`Order not found with id: ${id}`)

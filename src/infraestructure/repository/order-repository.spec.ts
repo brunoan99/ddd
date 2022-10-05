@@ -145,4 +145,14 @@ describe("Order repository test", () => {
       await sut.findById('any_invalid_id')
     }).rejects.toThrowError("Order not found with id: any_invalid_id")
   })
+
+  test('Should findById method return registered order', async () => {
+    const sut = new OrderRepository()
+    const customer = await createNewCustomer("1")
+    const orderItem = await createNewOrderItem("1", 10, 1)
+    const order = new Order("1", customer.id, [orderItem])
+    await sut.create(order)
+    const foundOrder = await sut.findById(order.id)
+    expect(foundOrder).toEqual(order)
+  })
 });
