@@ -12,7 +12,7 @@ import { CustomerRepository } from "./customer-repository";
 import { OrderRepository } from "./order-repository";
 import { ProductRepository } from "./product-repository";
 
-const createNewCustomer = async (id: string) => {
+const createNewCustomer = async (id: string): Promise<Customer> => {
   const customer = new Customer(id, `Customer ${id}`);
   const address = new Address("Street 1", 1, "Zipcode 1", "City 1");
   customer.changeAddress(address);
@@ -120,5 +120,22 @@ describe("Order repository test", () => {
     const sut = new OrderRepository()
     const orderModels = await sut.findAll()
     expect(orderModels).toEqual([])
+  })
+
+  test('Should findAll method return a list with all orders provided to repository', async () => {
+    const sut = new OrderRepository()
+    const customer = await createNewCustomer("1")
+    const orderItem1 = await createNewOrderItem("1", 10, 1)
+    const orderItem2 = await createNewOrderItem("3", 30, 3)
+    const orderItem3 = await createNewOrderItem("2", 20, 3)
+    const order1 = new Order("1", customer.id, [orderItem1])
+    const order2 = new Order("2", customer.id, [orderItem2])
+    const order3 = new Order("3", customer.id, [orderItem3])
+    const orders = [ order1, order2, order3 ]
+    for (const order of orders ) {
+      await sut.create(order)
+    }
+    const foundOrders = await sut.findAll()
+    expect(foundOrders).toEqual(orders)
   })
 });
