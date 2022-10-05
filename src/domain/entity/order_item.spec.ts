@@ -22,7 +22,7 @@ describe('Order', () => {
   test('Should throw error when price is less or equal zero', () => {
     expect(() => {
       new OrderItem("1", "1", "product1", 0, 1)
-    }).toThrowError("Price is required")
+    }).toThrowError("Price must be greater than 0")
   })
 
   test('Should throw error when quantity is less or equal zero', () => {

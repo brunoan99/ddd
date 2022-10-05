@@ -38,6 +38,35 @@ export class OrderRepository implements OrderRepositoryInterface {
     } catch (error) {
       throw new Error(`Order not found with id: ${entity.id}`)
     }
+    // compare OrderModel and entity
+    for (const item of orderModel.items) {
+      if (!entity.items.some(i => i.id === item.id)) {
+        OrderItemModel.destroy({ where: { id: item.id}})
+      }
+    }
+    for (const item of entity.items) {
+      if (!orderModel.items.some(i => i.id === item.id)) {
+        OrderItemModel.create({
+          id: item.id,
+          product_id: item.productId,
+          order_id: orderModel.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+        })
+      } else {
+        OrderItemModel.update({
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+        }, { where: { id: item.id }})
+      }
+    }
+    await OrderModel.update({
+      total: entity.total()
+    },{
+      where: { id: entity.id}
+    })
   }
 
   async findById(id: string): Promise<Order> {

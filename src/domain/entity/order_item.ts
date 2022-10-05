@@ -26,11 +26,32 @@ export class OrderItem {
       throw new Error('Name is required');
     }
     if (this._price <= 0) {
-      throw new Error('Price is required');
+      throw new Error('Price must be greater than 0');
     }
     if (this._quantity <= 0) {
       throw new Error('Quantity must be greater than 0');
     }
+  }
+
+  updatePrice(price: number): void {
+    if (this._price <= 0) {
+      throw new Error('Price needs to be greater than 0');
+    }
+    this._price = price
+  }
+
+  updateQuantity(quantity: number): void {
+    if (this._quantity <= 0) {
+      throw new Error('Quantity needs to be greater than 0');
+    }
+    this._quantity = quantity
+  }
+
+  updateName(name: string): void {
+    if (this._name.length === 0) {
+      throw new Error('Name is required');
+    }
+    this._name = name
   }
 
   get id(): string { return this._id }

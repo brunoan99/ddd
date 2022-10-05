@@ -161,9 +161,7 @@ describe("Order repository test", () => {
     const customer = new Customer("123", "Customer 1");
     const address = new Address("Street 1", 1, "Zipcode 1", "City 1");
     customer.changeAddress(address);
-
     const product = new Product("123", "Product 1", 10);
-
     const ordemItem = new OrderItem(
       "1",
       product.id,
@@ -171,10 +169,99 @@ describe("Order repository test", () => {
       product.price,
       2
     );
-
     const order = new Order("any_invalid_id", "123", [ordemItem]);
     expect(async () => {
       await sut.update(order)
     }).rejects.toThrowError("Order not found with id: any_invalid_id")
+  })
+
+  test('Should update method update a order adding a item', async () => {
+    const sut = new OrderRepository()
+    const customer = await createNewCustomer("1")
+    const orderItem1 = await createNewOrderItem("1", 10, 1)
+    const order = new Order("1", customer.id, [orderItem1])
+    await sut.create(order)
+
+    const orderItem2 = await createNewOrderItem("2", 10, 2)
+    order.changeItems([orderItem1, orderItem2])
+
+    await sut.update(order)
+    const orderModel = await OrderModel.findByPk(order.id, { include: [{ model: OrderItemModel }]})
+    expect(orderModel.toJSON()).toEqual({
+      customer_id: order.customerId,
+      id: order.id,
+      items: [{
+        id: order.items[0].id,
+        name: order.items[0].name,
+        price: order.items[0].price,
+        order_id: order.id,
+        product_id: order.items[0].productId,
+        quantity: order.items[0].quantity
+      },
+      {
+        id: order.items[1].id,
+        name: order.items[1].name,
+        price: order.items[1].price,
+        order_id: order.id,
+        product_id: order.items[1].productId,
+        quantity: order.items[1].quantity
+      }],
+      total: order.total()
+    })
+  })
+
+  test('Should update method update a order removing a item', async () => {
+    const sut = new OrderRepository()
+    const customer = await createNewCustomer("1")
+    const orderItem1 = await createNewOrderItem("1", 10, 1)
+    const orderItem2 = await createNewOrderItem("2", 10, 2)
+    const order = new Order("1", customer.id, [orderItem1, orderItem2])
+    await sut.create(order)
+
+    order.changeItems([orderItem1])
+
+    await sut.update(order)
+    const orderModel = await OrderModel.findByPk(order.id, { include: [{ model: OrderItemModel }]})
+    expect(orderModel.toJSON()).toEqual({
+      customer_id: order.customerId,
+      id: order.id,
+      items: [{
+        id: order.items[0].id,
+        name: order.items[0].name,
+        price: order.items[0].price,
+        order_id: order.id,
+        product_id: order.items[0].productId,
+        quantity: order.items[0].quantity
+      }],
+      total: order.total()
+    })
+  })
+
+  test('Should update method update a order and it order items', async () => {
+    const sut = new OrderRepository()
+    const customer = await createNewCustomer("1")
+    const orderItem1 = await createNewOrderItem("1", 10, 1)
+    const order = new Order("1", customer.id, [orderItem1])
+    await sut.create(order)
+    orderItem1.updatePrice(15)
+    orderItem1.updateQuantity(2)
+    orderItem1.updateName("New Name")
+    order.changeItems([orderItem1])
+
+    await sut.update(order)
+    const orderModel = await OrderModel.findByPk(order.id, { include: [{ model: OrderItemModel }]})
+    expect(orderModel.toJSON()).toEqual({
+      customer_id: order.customerId,
+      id: order.id,
+      items: [{
+        id: order.items[0].id,
+        name: order.items[0].name,
+        price: order.items[0].price,
+        order_id: order.id,
+        product_id: order.items[0].productId,
+        quantity: order.items[0].quantity
+      }],
+      total: order.total()
+    })
   })
 });
