@@ -4,7 +4,7 @@ import { Customer } from "../../domain/entity/customer";
 import { CustomerModel } from "../db/sequelize/model/customer";
 import { CustomerRepository } from "./customer-repository";
 
-describe("Customer repository test", () => {
+describe("Customer repository", () => {
   let sequelize: Sequelize;
 
   beforeEach(async () => {
@@ -23,12 +23,12 @@ describe("Customer repository test", () => {
     await sequelize.close();
   });
 
-  it("should create a customer", async () => {
-    const customerRepository = new CustomerRepository();
+  test("should create a customer", async () => {
+    const sut = new CustomerRepository();
     const customer = new Customer("123", "Customer 1");
     const address = new Address("Street 1", 1, "Zipcode 1", "City 1");
     customer.changeAddress(address);
-    await customerRepository.create(customer);
+    await sut.create(customer);
 
     const customerModel = await CustomerModel.findOne({ where: { id: "123" } });
 
@@ -44,15 +44,15 @@ describe("Customer repository test", () => {
     });
   });
 
-  it("should update a customer", async () => {
-    const customerRepository = new CustomerRepository();
+  test("should update a customer", async () => {
+    const sut = new CustomerRepository();
     const customer = new Customer("123", "Customer 1");
     const address = new Address("Street 1", 1, "Zipcode 1", "City 1");
     customer.changeAddress(address);
-    await customerRepository.create(customer);
+    await sut.create(customer);
 
     customer.changeName("Customer 2");
-    await customerRepository.update(customer);
+    await sut.update(customer);
     const customerModel = await CustomerModel.findOne({ where: { id: "123" } });
 
     expect(customerModel.toJSON()).toStrictEqual({
@@ -67,28 +67,28 @@ describe("Customer repository test", () => {
     });
   });
 
-  it("should find a customer", async () => {
-    const customerRepository = new CustomerRepository();
+  test("should find a customer", async () => {
+    const sut = new CustomerRepository();
     const customer = new Customer("123", "Customer 1");
     const address = new Address("Street 1", 1, "Zipcode 1", "City 1");
     customer.changeAddress(address)
-    await customerRepository.create(customer);
+    await sut.create(customer);
 
-    const customerResult = await customerRepository.findById(customer.id);
+    const customerResult = await sut.findById(customer.id);
 
     expect(customer).toStrictEqual(customerResult);
   });
 
-  it("should throw an error when customer is not found", async () => {
-    const customerRepository = new CustomerRepository();
+  test("should throw an error when customer is not found", async () => {
+    const sut = new CustomerRepository();
 
     expect(async () => {
-      await customerRepository.findById("456ABC");
+      await sut.findById("456ABC");
     }).rejects.toThrow("Customer not found");
   });
 
-  it("should find all customers", async () => {
-    const customerRepository = new CustomerRepository();
+  test("should find all customers", async () => {
+    const sut = new CustomerRepository();
     const customer1 = new Customer("123", "Customer 1");
     const address1 = new Address("Street 1", 1, "Zipcode 1", "City 1");
     customer1.changeAddress(address1)
@@ -100,10 +100,10 @@ describe("Customer repository test", () => {
     customer2.changeAddress(address2)
     customer2.addRewardPoints(20);
 
-    await customerRepository.create(customer1);
-    await customerRepository.create(customer2);
+    await sut.create(customer1);
+    await sut.create(customer2);
 
-    const customers = await customerRepository.findAll();
+    const customers = await sut.findAll();
 
     expect(customers).toHaveLength(2);
     expect(customers).toContainEqual(customer1);
