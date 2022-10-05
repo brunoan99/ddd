@@ -155,4 +155,26 @@ describe("Order repository test", () => {
     const foundOrder = await sut.findById(order.id)
     expect(foundOrder).toEqual(order)
   })
+
+  test('Should update method return a error if the order is not found', async () => {
+    const sut = new OrderRepository()
+    const customer = new Customer("123", "Customer 1");
+    const address = new Address("Street 1", 1, "Zipcode 1", "City 1");
+    customer.changeAddress(address);
+
+    const product = new Product("123", "Product 1", 10);
+
+    const ordemItem = new OrderItem(
+      "1",
+      product.id,
+      product.name,
+      product.price,
+      2
+    );
+
+    const order = new Order("any_invalid_id", "123", [ordemItem]);
+    expect(async () => {
+      await sut.update(order)
+    }).rejects.toThrowError("Order not found with id: any_invalid_id")
+  })
 });
