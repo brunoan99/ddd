@@ -138,4 +138,11 @@ describe("Order repository test", () => {
     const foundOrders = await sut.findAll()
     expect(foundOrders).toEqual(orders)
   })
+
+  test('Should findById method throw if no order was before provided to repository', async () => {
+    const sut = new OrderRepository()
+    expect(async () => {
+      await sut.findById('any_invalid_id')
+    }).rejects.toThrowError("Order not found with id: any_invalid_id")
+  })
 });
