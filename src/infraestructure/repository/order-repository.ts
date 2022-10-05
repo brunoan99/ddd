@@ -1,4 +1,7 @@
+import { Transaction } from "sequelize";
+import sequelize from "sequelize/types/sequelize";
 import { Order } from "../../domain/entity/order";
+import { OrderItem } from "../../domain/entity/order_item";
 import { OrderRepositoryInterface } from "../../domain/repository/order-repository-interface";
 import { OrderModel } from "../db/sequelize/model/order";
 import { OrderItemModel } from "../db/sequelize/model/order-item";
@@ -32,7 +35,7 @@ export class OrderRepository implements OrderRepositoryInterface {
     throw new Error("Method not implemented.");
   }
   
-  findAll(): Promise<Order[]> {
-    throw new Error("Method not implemented.");
+  async findAll(): Promise<Order[]> {
+    return []
   }
 }

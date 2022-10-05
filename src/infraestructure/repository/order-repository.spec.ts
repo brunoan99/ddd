@@ -12,6 +12,40 @@ import { CustomerRepository } from "./customer-repository";
 import { OrderRepository } from "./order-repository";
 import { ProductRepository } from "./product-repository";
 
+const createNewCustomer = async (id: string) => {
+  const customer = new Customer(id, `Customer ${id}`);
+  const address = new Address("Street 1", 1, "Zipcode 1", "City 1");
+  customer.changeAddress(address);
+  await CustomerModel.create({
+    id: customer.id,
+    name: customer.name,
+    street: customer.address.street,
+    number: customer.address.number,
+    zipcode: customer.address.zip,
+    city: customer.address.city,
+    active: customer.isActive(),
+    rewardPoints: customer.rewardPoints,
+  });
+  return customer
+}
+
+const createNewOrderItem = async (id: string, price: number, quantity: number): Promise<OrderItem> => {
+  const product = new Product(`ABC${id}`, `Product ${id}`, price);
+  await ProductModel.create({
+    id: product.id,
+    name: product.name,
+    price: product.price,
+  })
+  const orderItem = new OrderItem(
+    id,
+    product.id,
+    product.name,
+    product.price,
+    quantity
+  );
+  return orderItem
+}
+
 describe("Order repository test", () => {
   let sequelize: Sequelize;
 
@@ -23,7 +57,7 @@ describe("Order repository test", () => {
       sync: { force: true },
     });
 
-    sequelize.addModels([
+    await sequelize.addModels([
       CustomerModel,
       OrderModel,
       OrderItemModel,
@@ -81,4 +115,10 @@ describe("Order repository test", () => {
       ],
     });
   });
+
+  test('Should findAll method return a empty list if no order was before provided to repository', async () => {
+    const sut = new OrderRepository()
+    const orderModels = await sut.findAll()
+    expect(orderModels).toEqual([])
+  })
 });
