@@ -1,5 +1,5 @@
 import { Address } from "../value-object/address"
-import { CustoemrFactory as sut } from "./customer-factory"
+import { CustomerFactory as sut } from "./customer-factory"
 
 describe('Customer Factory', () => {
   test('Should create a customer', () => {

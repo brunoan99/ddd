@@ -2,7 +2,7 @@ import { Customer } from "../entity/customer";
 import { v4 as uuid } from "uuid"
 import { Address } from "../value-object/address";
 
-export class CustoemrFactory {
+export class CustomerFactory {
   static create(name: string): Customer {
     return new Customer(uuid(), name)
   }
