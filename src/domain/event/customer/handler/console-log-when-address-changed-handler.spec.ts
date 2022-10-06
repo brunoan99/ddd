@@ -1,6 +1,6 @@
+import { EventDispatcher } from "../../../@shared/event/event-dispatcher"
 import { Address } from "../../../entity/address"
 import { Customer } from "../../../entity/customer"
-import { EventDispatcher } from "../../@shared/event-dispatcher"
 import { CustomerAddressChangedEvent } from "../customer-address-changed-event"
 import { ConsoleLogWhenCustomerAddressChangeHandler } from "./console-log-when-address-changed-handler"
 
