@@ -1,5 +1,5 @@
 import { EventDispatcher } from "../../../@shared/event/event-dispatcher"
-import { Customer } from "../../../entity/customer"
+import { Customer } from "../../../customer/entity/customer"
 import { CustomerCreatedEvent } from "../customer-created-event"
 import { SecondConsoleLogWhenCustomerIsCreatedHandler } from "./second-console-log-when-customer-is-created-handler"
 
