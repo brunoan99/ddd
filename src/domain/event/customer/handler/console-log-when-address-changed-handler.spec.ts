@@ -18,4 +18,16 @@ describe('Console Log When Address Change Handler Event', () => {
     eventDispatcher.notify(event)
     expect(consoleSpy).toHaveBeenCalledWith(`Endereço do cliente: ${customer.id}, ${customer.name} alterado para: ${customer.address.toString()}`)
   })
+
+  test('Should return a error if the customer provided to event do not contain a address', () => {
+    const sut = new ConsoleLogWhenCustomerAddressChangeHandler()
+    const eventDispatcher = new EventDispatcher()
+    eventDispatcher.register('CustomerAddressChangedEvent', sut)
+
+    const customer = new Customer("1", "Customer 1")
+    const event = new CustomerAddressChangedEvent(customer)
+    expect(() => {
+      eventDispatcher.notify(event)
+    }).toThrow("Customer must have a address")
+  })
 })
